@@ -1,10 +1,10 @@
 package at.htlgkr.pos.dashboard;
 
-public class Widget {
+public class WidgetTime {
     private String value;
     private String unit;
 
-    public Widget(String value, String unit) {
+    public WidgetTime(String value, String unit) {
         this.value = value;
         this.unit = unit;
     }

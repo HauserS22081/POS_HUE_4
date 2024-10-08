@@ -1,14 +1,21 @@
 package at.htlgkr.pos.dashboard;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 
-public class DashboardController {
-    @FXML
-    private Label welcomeText;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class DashboardController implements Initializable {
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    private Label lbl_temperature;
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        lbl_temperature.
+        lbl_temperature.setText("abc");
     }
 }
