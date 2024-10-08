@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.htlgkr.pos3.hue4.dashboard</groupId>
-  <artifactId>HUE4</artifactId>
+  <groupId>at.htlgkr.pos</groupId>
+  <artifactId>dashboard</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>HUE4</name>
 
@@ -58,7 +58,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>net.htlgkr.pos3.hue4.dashboard.hue4/net.htlgkr.pos3.hue4.dashboard.hue4.HelloApplication</mainClass>
+              <mainClass>at.htlgkr.pos.dashboard/at.htlgkr.pos.dashboard.DashboardApplication</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

@@ -1,8 +1,8 @@
-module net.htlgkr.pos3.hue4.dashboard.hue4 {
+module at.htlgkr.pos.dashboard {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens net.htlgkr.pos3.hue4.dashboard.hue4 to javafx.fxml;
-    exports net.htlgkr.pos3.hue4.dashboard.hue4;
+    opens at.htlgkr.pos.dashboard to javafx.fxml;
+    exports at.htlgkr.pos.dashboard;
 }
