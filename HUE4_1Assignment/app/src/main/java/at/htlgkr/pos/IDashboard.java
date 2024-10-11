@@ -1,4 +1,8 @@
 package at.htlgkr.pos;
 
-public class IDashboard {
+public interface IDashboard {
+    String displayableTemperature();
+    String displayablePressure();
+    String displayableSpeed();
+    String displayableTime();
 }

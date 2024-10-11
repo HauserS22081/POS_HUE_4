@@ -3,16 +3,16 @@ package at.htlgkr.pos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Widget {
-    private int value;
+public class TimeWidget {
+    private String value;
     private String unit;
     private List<Converter> converterList = new ArrayList<>();
 
-    public Widget(int value) {
+    public TimeWidget(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -20,7 +20,7 @@ public class Widget {
         return unit;
     }
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
