@@ -1,5 +1,3 @@
-package at.htlgkr.pos.weapon;
-
 import java.util.List;
 
 public interface IWeapons {
