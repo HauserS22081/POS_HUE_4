@@ -1,8 +1,6 @@
 package at.htlgkr.pos;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Widget {
@@ -13,6 +11,7 @@ public class Widget {
 
     public Widget(int value, String unit) {
         this.value = value;
+        startValue = value;
         this.unit = unit;
     }
 
@@ -38,5 +37,42 @@ public class Widget {
 
     public void addConverter(Converter converter, String unit) {
         converterMap.put(unit, converter);
+    }
+
+    public void removeConverter(String unit) {
+        converterMap.remove(unit);
+    }
+
+    public void convertRight(boolean nextIterationIsWanted) {
+        for (Map.Entry<String, Converter> entry : converterMap.entrySet()) {
+            if (entry.getKey().equals(unit)) {
+                nextIterationIsWanted = true;
+            }
+            if (nextIterationIsWanted) {
+                value = entry.getValue().convert(startValue);
+                unit = entry.getKey();
+                nextIterationIsWanted = false;
+            }
+        }
+
+        if (nextIterationIsWanted) {
+            convertRight(nextIterationIsWanted);
+        }
+    }
+
+    public void convertLeft() {
+        String unit;
+        Converter converter;
+
+        for (Map.Entry<String, Converter> entry : converterMap.entrySet()) {
+            unit = entry.getKey();
+            converter = entry.getValue();
+
+            if (unit.equals(this.unit)) {
+                value = converter.convert(startValue);
+                this.unit = unit;
+                return;
+            }
+        }
     }
 }

@@ -4,109 +4,109 @@ public class Dashboard implements IDashboard{
 
     private final int TEMPERATURESTARTVALUE = 20;
     private final int PRESSURESTARTVALUE = 80;
-    private final int VELOCITYSTARTVALUE = 42;
+    private final int SPEEDSTARTVALUE = 42;
     private final String TIMESTARTVALUE = "22:23";
     private final String TEMPERATURESTARTUNIT = "°C";
     private final String PRESSURESTARTUNIT = "Pa";
-    private final String VELOCITYSTARTUNIT = "m/s";
+    private final String SPEEDSTARTUNIT = "m/s";
     private final String TIMESTARTUNIT = "hh:mm:ss";
 
     private final Widget temperatureWidget = new Widget(TEMPERATURESTARTVALUE, TEMPERATURESTARTUNIT);
     private final Widget pressureWidget = new Widget(PRESSURESTARTVALUE, PRESSURESTARTUNIT);
-    private final Widget velocityWidget = new Widget(VELOCITYSTARTVALUE, VELOCITYSTARTUNIT);
+    private final Widget speedWidget = new Widget(SPEEDSTARTVALUE, SPEEDSTARTUNIT);
     private final TimeWidget timeWidget = new TimeWidget(TIMESTARTVALUE, TIMESTARTUNIT);
+
+    private boolean isLeftSwitch = false;
 
     public Dashboard() {
         addTemperatureCalculations();
         addPressureCalculations();
-        addVelocityCalculations();
+        addSpeedCalculations();
         addTimeCaclulations();
+    }
+
+    public void setLeftSwitch(boolean leftSwitch) {
+        isLeftSwitch = leftSwitch;
     }
 
     @Override
     public String displayableTemperature() {
-        return "";
+        if (isLeftSwitch) {
+            temperatureWidget.convertLeft();
+        } else {
+            temperatureWidget.convertRight(false);
+        }
+        return temperatureWidget.getValue() + " " + temperatureWidget.getUnit();
     }
 
     @Override
     public String displayablePressure() {
-        return "";
+        if (isLeftSwitch) {
+            pressureWidget.convertLeft();
+        } else {
+            pressureWidget.convertRight(false);
+        }
+
+        return pressureWidget.getValue() + " " + pressureWidget.getUnit();
     }
 
     @Override
     public String displayableSpeed() {
-        return "";
+        if (isLeftSwitch) {
+            speedWidget.convertLeft();
+        } else {
+            speedWidget.convertRight(false);
+        }
+
+        return speedWidget.getValue() + " " + speedWidget.getUnit();
     }
 
     @Override
     public String displayableTime() {
-        return "";
-    }
+        if (isLeftSwitch) {
+            speedWidget.convertLeft();
+        } else {
+            speedWidget.convertRight(false);
+        }
+        
 
-    public void removeTemperatureCalculation(String unit) {
-        temperatureWidget.removeConverter(unit);
-    }
-
-    public void addTemperatureCalculation(Converter converter, String unit) {
-
+        return timeWidget.getValue() + " " + timeWidget.getUnit();
     }
 
     private void addTemperatureCalculations() {
-        int startValue = temperatureWidget.getStartValue();
+        // value ist immer in °C
 
-        addTemperatureCalculation(value -> startValue, "°C");
-        addTemperatureCalculation(value -> (int) (startValue + 273.15), "K");
-        addTemperatureCalculation(value -> (int) (startValue * 9 / 5) + 32, "°F");
-
-        // °F -> °C
-//        temperatureWidget.addConverter(value -> (value - 32) * 5 / 9, "°C");
-
-        // °C -> K
-//        temperatureWidget.addConverter(value -> (int) (value + 273.15), "K");
-
-        // K -> °F
-//        temperatureWidget.addConverter(value -> (int) ((value - 273.15) * 9 / 5 + 32), "°F");
+        addTemperatureCalculation(value -> value, "°C");
+        addTemperatureCalculation(value -> (int) (value + 273.15), "K");
+        addTemperatureCalculation(value -> value * 9 / 5 + 32, "°F");
     }
 
     private void addPressureCalculations() {
+        // value ist immer in Pa
 
-        int startValue = pressureWidget.getStartValue();
-
-
-        pressureWidget.addConverter(() -> startValue, "Pa");
-
-        pressureWidget.addConverter(() -> startValue / 100000, "bar");
-        
-        // bar -> Pa
-        pressureWidget.addConverter(value -> value * 100000, "Pa");
-
-        // Pa -> bar
-        pressureWidget.addConverter(value -> startValue / 100000, "bar");
+        addPressureCalculation(value -> value, "Pa");
+        addPressureCalculation(value -> value / 100000, "bar");
     }
 
-    private void addVelocityCalculations() {
-        // mph -> m/s
-        velocityWidget.addConverter(value -> (int) (value / 2.237), "m/s");
+    private void addSpeedCalculations() {
+        // value ist immer in m/s
 
-        // m/s -> km/h
-        velocityWidget.addConverter(value -> (int) (value * 3.6), "km/h");
-
-        // km/h -> mph
-        velocityWidget.addConverter(value -> (int) (value / 1.609), "km/h");
+        addSpeedCalculation(value -> value, "m/s");
+        addSpeedCalculation(value -> (int) (value * 3.6), "km/h");
+        addSpeedCalculation(value -> (int) (value * 2.237), "km/h");
     }
 
     private void addTimeCaclulations() {
-        // am/pm -> hh:mm:ss
-        timeWidget.addConverter(value -> timeWidget.getStartValue(), "hh:mm:ss");
+        // value ist immer in hh:mm:ss
 
-        // hh:mm:ss -> hh:mm
-        timeWidget.addConverter(value -> {
+        addTimeCalculation(value -> value, "hh:mm:ss");
+
+        addTimeCalculation(value -> {
             String[] parts = value.split(":");
             return parts[0] + ":" + parts[1];
         }, "hh:mm");
 
-        // hh:mm -> am/pm
-        timeWidget.addConverter(value -> {
+        addTimeCalculation(value -> {
             String[] parts = value.split(":");
             int hours = Integer.parseInt(parts[0]);
             if (hours > 12) {
@@ -119,5 +119,41 @@ public class Dashboard implements IDashboard{
             return hours + ":" + parts[1];
 
         }, Integer.parseInt(timeWidget.getValue().split(":")[0]) < 12 ? "am" : "pm");
+    }
+
+    public void removeTemperatureCalculation(String unit) {
+        temperatureWidget.removeConverter(unit);
+    }
+
+    public void addTemperatureCalculation(Converter converter, String unit) {
+        // ausgehend von °C
+        temperatureWidget.addConverter(converter, unit);
+    }
+
+    public void removePressureCalculations(String unit) {
+        pressureWidget.removeConverter(unit);
+    }
+
+    public void addPressureCalculation(Converter converter, String unit) {
+        // ausgehend von Pa
+        pressureWidget.addConverter(converter, unit);
+    }
+
+    public void removeSpeedCalculation(String unit) {
+        speedWidget.removeConverter(unit);
+    }
+
+    public void addSpeedCalculation(Converter converter, String unit) {
+        // ausgehend von m/s
+        speedWidget.addConverter(converter, unit);
+    }
+
+    public void removeTimeCalculation(String unit) {
+        timeWidget.removeConverter(unit);
+    }
+
+    public void addTimeCalculation(TimeConverter converter, String unit) {
+        // ausgehend von hh:mm:ss
+        timeWidget.addConverter(converter, unit);
     }
 }

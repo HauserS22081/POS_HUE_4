@@ -1,5 +1,5 @@
 package at.htlgkr.pos;
 
 public interface Converter {
-    int convert();
+    int convert(int value);
 }
