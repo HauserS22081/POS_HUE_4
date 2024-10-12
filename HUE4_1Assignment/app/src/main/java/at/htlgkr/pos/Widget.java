@@ -45,34 +45,38 @@ public class Widget {
 
     public void convertRight(boolean nextIterationIsWanted) {
         for (Map.Entry<String, Converter> entry : converterMap.entrySet()) {
-            if (entry.getKey().equals(unit)) {
-                nextIterationIsWanted = true;
-            }
             if (nextIterationIsWanted) {
                 value = entry.getValue().convert(startValue);
                 unit = entry.getKey();
-                nextIterationIsWanted = false;
+                return;
+            }
+
+            if (entry.getKey().equals(unit)) {
+                nextIterationIsWanted = true;
             }
         }
 
-        if (nextIterationIsWanted) {
-            convertRight(nextIterationIsWanted);
-        }
+        convertRight(nextIterationIsWanted);
     }
 
     public void convertLeft() {
-        String unit;
-        Converter converter;
+        String tempUnit = "";
+        Converter converter = null;
 
         for (Map.Entry<String, Converter> entry : converterMap.entrySet()) {
-            unit = entry.getKey();
+            tempUnit = entry.getKey();
             converter = entry.getValue();
+        }
 
-            if (unit.equals(this.unit)) {
+        for (Map.Entry<String, Converter> entry : converterMap.entrySet()) {
+            if (entry.getKey().equals(this.unit)) {
                 value = converter.convert(startValue);
-                this.unit = unit;
+                this.unit = tempUnit;
                 return;
             }
+
+            tempUnit = entry.getKey();
+            converter = entry.getValue();
         }
     }
 }

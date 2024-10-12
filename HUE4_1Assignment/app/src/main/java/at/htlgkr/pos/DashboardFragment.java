@@ -56,7 +56,23 @@ public class DashboardFragment extends Fragment {
             });
         }
 
+        setInitialTexts();
+
         return binding.getRoot();
+    }
+
+    private void setInitialTexts() {
+        List<String> initialTexts = dashboard.getInitialTexts();
+
+        for (int i = 0; i < initialTexts.size(); i++) {
+            values.get(i).setText(initialTexts.get(i).split(" ")[0]);
+
+            String unit = initialTexts.get(i).split(" ")[1];
+
+            if (i == 3 && !("am".equals(unit)) && !("pm".equals(unit))) unit = " ";
+
+            units.get(i).setText(unit);
+        }
     }
 
     private void setTexts(View button) {
@@ -82,7 +98,10 @@ public class DashboardFragment extends Fragment {
             case "time":
                 widgetText = dashboard.displayableTime();
                 values.get(3).setText(widgetText.split(" ")[0]);
-                units.get(3).setText(widgetText.split(" ")[1]);
+
+                String unit = widgetText.split(" ")[1];
+                if ("_".equals(unit)) unit = "";
+                units.get(3).setText(unit);
                 break;
             default:
                 System.out.println("Error with ButtonDescriptions");

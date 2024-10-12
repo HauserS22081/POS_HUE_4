@@ -1,11 +1,14 @@
 package at.htlgkr.pos;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Dashboard implements IDashboard{
 
     private final int TEMPERATURESTARTVALUE = 20;
-    private final int PRESSURESTARTVALUE = 80;
+    private final int PRESSURESTARTVALUE = 80000000;
     private final int SPEEDSTARTVALUE = 42;
-    private final String TIMESTARTVALUE = "22:23";
+    private final String TIMESTARTVALUE = "5:23:49";
     private final String TEMPERATURESTARTUNIT = "°C";
     private final String PRESSURESTARTUNIT = "Pa";
     private final String SPEEDSTARTUNIT = "m/s";
@@ -23,6 +26,17 @@ public class Dashboard implements IDashboard{
         addPressureCalculations();
         addSpeedCalculations();
         addTimeCaclulations();
+    }
+
+    public List<String> getInitialTexts() {
+        List<String> initialTexts = new ArrayList<>();
+
+        initialTexts.add(temperatureWidget.getValue() + " " + temperatureWidget.getUnit());
+        initialTexts.add(pressureWidget.getValue() + " " + pressureWidget.getUnit());
+        initialTexts.add(speedWidget.getValue() + " " + speedWidget.getUnit());
+        initialTexts.add(timeWidget.getValue() + " " + timeWidget.getUnit());
+
+        return initialTexts;
     }
 
     public void setLeftSwitch(boolean leftSwitch) {
@@ -64,13 +78,15 @@ public class Dashboard implements IDashboard{
     @Override
     public String displayableTime() {
         if (isLeftSwitch) {
-            speedWidget.convertLeft();
+            timeWidget.convertLeft();
         } else {
-            speedWidget.convertRight(false);
+            timeWidget.convertRight(false);
         }
-        
 
-        return timeWidget.getValue() + " " + timeWidget.getUnit();
+        String unit = timeWidget.getUnit();
+        if (!("am".equals(unit)) && !("pm".equals(unit))) unit = "_";
+
+        return timeWidget.getValue() + " " + unit;
     }
 
     private void addTemperatureCalculations() {
@@ -93,7 +109,7 @@ public class Dashboard implements IDashboard{
 
         addSpeedCalculation(value -> value, "m/s");
         addSpeedCalculation(value -> (int) (value * 3.6), "km/h");
-        addSpeedCalculation(value -> (int) (value * 2.237), "km/h");
+        addSpeedCalculation(value -> (int) (value * 2.237), "mph");
     }
 
     private void addTimeCaclulations() {
